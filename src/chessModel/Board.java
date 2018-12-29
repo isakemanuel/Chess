@@ -2,24 +2,18 @@ package chessModel;
 
 import java.util.ArrayList;
 
-import chessModel.piece.Bishop;
-import chessModel.piece.King;
-import chessModel.piece.Knight;
-import chessModel.piece.Pawn;
-import chessModel.piece.Piece;
-import chessModel.piece.Queen;
-import chessModel.piece.Rook;
+import chessModel.piece.*;
 import util.ChessUtil;
 
 public class Board {
 	public final int boardWidth;
 	public final int boardHeight;
-	protected ArrayList<Piece> pieces = new ArrayList<Piece>();
+	protected ArrayList<IPiece> pieces = new ArrayList<IPiece>();
 	private Log movelog;
 	private int whiteScore;
 	private int blackScore;
-	private Rook blackKingSide, whiteKingSide, blackQueenSide, whiteQueenSide;
-	private King blackKing, whiteKing;
+	private IPiece blackKingSide, whiteKingSide, blackQueenSide, whiteQueenSide;
+	private IPiece blackKing, whiteKing;
 	private String enPassantTarget;
 
 	public Board() {
@@ -39,28 +33,28 @@ public class Board {
 			}
 
 			// TODO fix this
-			blackQueenSide = new Rook(0, 0, 1);
+			blackQueenSide = PieceFactory.makeRook(0, 0, 1);
 			pieces.add(blackQueenSide);
-			blackKingSide = new Rook(0, 7, 1);
+			blackKingSide = PieceFactory.makeRook(0, 7, 1);
 			pieces.add(blackKingSide);
-			whiteQueenSide = new Rook(7, 0, 0);
+			whiteQueenSide = PieceFactory.makeRook(7, 0, 0);
 			pieces.add(whiteQueenSide);
-			whiteKingSide = new Rook(7, 7, 0);
+			whiteKingSide = PieceFactory.makeRook(7, 7, 0);
 			pieces.add(whiteKingSide);
 
-			pieces.add(new Knight(0, 1, 1));
-			pieces.add(new Knight(0, 6, 1));
-			pieces.add(new Knight(7, 1, 0));
-			pieces.add(new Knight(7, 6, 0));
-			pieces.add(new Bishop(0, 2, 1));
-			pieces.add(new Bishop(0, 5, 1));
-			pieces.add(new Bishop(7, 2, 0));
-			pieces.add(new Bishop(7, 5, 0));
-			pieces.add(new Queen(0, 3, 1));
-			pieces.add(new Queen(7, 3, 0));
-			whiteKing = new King(0, 4, 1);
+			pieces.add(PieceFactory.makeKnight(0, 1, 1));
+			pieces.add(PieceFactory.makeKnight(0, 6, 1));
+			pieces.add(PieceFactory.makeKnight(7, 1, 0));
+			pieces.add(PieceFactory.makeKnight(7, 6, 0));
+			pieces.add(PieceFactory.makeBishop(0, 2, 1));
+			pieces.add(PieceFactory.makeBishop(0, 5, 1));
+			pieces.add(PieceFactory.makeBishop(7, 2, 0));
+			pieces.add(PieceFactory.makeBishop(7, 5, 0));
+			pieces.add(PieceFactory.makeQueen(0, 3, 1));
+			pieces.add(PieceFactory.makeQueen(7, 3, 0));
+			whiteKing = PieceFactory.makeKing(0, 4, 1);
 			pieces.add(whiteKing);
-			blackKing = new King(7, 4, 0);
+			blackKing = PieceFactory.makeKing(7, 4, 0);
 			pieces.add(blackKing);
 		}
 
@@ -79,8 +73,8 @@ public class Board {
 	 * @return If the move was succesful
 	 */
 	public boolean move(int oldX, int oldY, int x, int y) {
-		Piece selectedP = null;
-		Piece otherP = null;
+		IPiece selectedP = null;
+		IPiece otherP = null;
 		SquareStatus status = SquareStatus.EMPTY;
 		// Sets selectedP to the right piece
 		selectedP = getPiece(oldX, oldY);
@@ -162,7 +156,7 @@ public class Board {
 	 *            The y location of the other square
 	 * @return
 	 */
-	public boolean isObstructed(Piece p, int x, int y) {
+	public boolean isObstructed(IPiece p, int x, int y) {
 		// Must be left/right
 		if (p.getX() == x) {
 			int dir = y > p.getY() ? 1 : -1;
@@ -208,7 +202,7 @@ public class Board {
 			board += (i + " ");
 			for (int u = 0; u < boardWidth; u++) {
 				wasPrinted = false;
-				for (Piece piece : pieces) {
+				for (IPiece piece : pieces) {
 					if (piece.getX() == i && piece.getY() == u) {
 						board += (piece.getChar());
 						wasPrinted = true;
@@ -240,7 +234,7 @@ public class Board {
 	 * @return If the location is threatened.
 	 */
 	public boolean isThreatenedSquare(int x, int y, int side) {
-		for (Piece p : pieces) {
+		for (IPiece p : pieces) {
 			if (p.getSide() != side) { // Only the other team can threaten a
 										// square for any given side
 				SquareStatus squareToCheck = getSquareStatus(x, y, p.getSide());
@@ -258,8 +252,9 @@ public class Board {
 	 * @return If the side given is in check
 	 */
 	public boolean isInCheck(int side) {
-		for (Piece p : pieces) {
-			if (p instanceof King && p.getSide() == side) {
+	    IPiece[] kings = {whiteKing, blackKing};
+		for (IPiece p : kings) {
+			if (p.getSide() == side) {
 				return isThreatenedSquare(p.getX(), p.getY(), side);
 			}
 		}
@@ -273,7 +268,7 @@ public class Board {
 	 * @param y
 	 * @return
 	 */
-	public boolean resolvesCheck(Piece p, int x, int y) {
+	public boolean resolvesCheck(IPiece p, int x, int y) {
 		Board b = new Board();
 		for (Integer[] move : movelog.getLogArray()) {
 			b.move(move[0], move[1], move[2], move[3]);
@@ -291,7 +286,7 @@ public class Board {
 	 * 
 	 * @return The ArrayList of pieces
 	 */
-	public ArrayList<Piece> getPieces() {
+	public ArrayList<IPiece> getPieces() {
 		return pieces;
 	}
 
@@ -307,7 +302,7 @@ public class Board {
 	 */
 	public SquareStatus getSquareStatus(int x, int y, int side) {
 		SquareStatus square = SquareStatus.EMPTY;
-		for (Piece otherP : pieces) {
+		for (IPiece otherP : pieces) {
 			if (otherP.getX() == x && otherP.getY() == y) {
 				if (otherP.getSide() == side) {
 					square = SquareStatus.TEAM;
@@ -327,8 +322,8 @@ public class Board {
 	 *            The y coordinate of the piece to find
 	 * @return The piece at coordinates (x, y), or null if there is no piece
 	 */
-	public Piece getPiece(int x, int y) {
-		for (Piece piece : pieces) {
+	public IPiece getPiece(int x, int y) {
+		for (IPiece piece : pieces) {
 			if (x == piece.getX() && y == piece.getY()) {
 				return piece;
 			}
@@ -338,7 +333,7 @@ public class Board {
 
 	public ArrayList<Integer[]> getAllMoves(int side) {
 		ArrayList<Integer[]> moveList = new ArrayList<Integer[]>();
-		for (Piece p : pieces) {
+		for (IPiece p : pieces) {
 			Integer[] moves = getMovesForPiece(p);
 			if (moves[0] != null && moves[2] != null) {
 				moveList.add(moves);
@@ -347,7 +342,7 @@ public class Board {
 		return moveList;
 	}
 
-	public Integer[] getMovesForPiece(Piece p) {
+	public Integer[] getMovesForPiece(IPiece p) {
 		Integer[] moveList = new Integer[4];
 		for (int i = 0; i < boardHeight; i++) {
 			for (int u = 0; u < boardWidth; u++) {
@@ -435,7 +430,7 @@ public class Board {
 		StringBuilder fen = new StringBuilder();
 		for (int y = 0; y < boardHeight; y++) {
 			for (int x = 0; x < boardWidth; x++) {
-				Piece p = getPiece(y, x);
+				IPiece p = getPiece(y, x);
 				if (p == null) {
 					int start = x;
 
@@ -486,11 +481,11 @@ public class Board {
 		return fen.toString();
 	}
 
-	public void addPiece(Piece p) {
+	public void addPiece(IPiece p) {
 		pieces.add(p);
 	}
 
-	public void removePieces(Piece p) {
+	public void removePieces(IPiece p) {
 		pieces.remove(p);
 	}
 
@@ -517,22 +512,22 @@ public class Board {
 				c = Character.toLowerCase(c);
 				switch (c) {
 				case 'k':
-					addPiece(new King(y, x, side));
+					addPiece(PieceFactory.makeKing(y, x, side));
 					break;
 				case 'q':
-					addPiece(new Queen(y, x, side));
+					addPiece(PieceFactory.makeQueen(y, x, side));
 					break;
 				case 'r':
-					addPiece(new Rook(y, x, side));
+					addPiece(PieceFactory.makeRook(y, x, side));
 					break;
 				case 'b':
-					addPiece(new Bishop(y, x, side));
+					addPiece(PieceFactory.makeBishop(y, x, side));
 					break;
 				case 'n':
-					addPiece(new Knight(y, x, side));
+					addPiece(PieceFactory.makeKnight(y, x, side));
 					break;
 				case 'p':
-					addPiece(new Pawn(y, x, side));
+					addPiece(PieceFactory.makePawn(y, x, side));
 					break;
 				}
 			}

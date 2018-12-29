@@ -2,7 +2,7 @@ package chessModel.piece;
 
 import chessModel.SquareStatus;
 
-public class Rook extends Piece
+class Rook extends Piece
 {
 	public static int KINGSIDE = 0;
 	public static int QUEENSIDE = 1;

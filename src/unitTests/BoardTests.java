@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import javax.swing.UIManager;
 
+import chessModel.piece.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -17,12 +18,6 @@ import org.junit.Test;
 
 import chessModel.Board;
 import chessModel.SquareStatus;
-import chessModel.piece.Bishop;
-import chessModel.piece.King;
-import chessModel.piece.Knight;
-import chessModel.piece.Pawn;
-import chessModel.piece.Piece;
-import chessModel.piece.Rook;
 
 public class BoardTests {
 
@@ -94,7 +89,7 @@ public class BoardTests {
 			if (move == null) {
 				fail("Move " + i + " the move was null.");
 			}
-			Piece p = b.getPiece(move[0], move[1]);
+			IPiece p = b.getPiece(move[0], move[1]);
 			if (p == null) {
 				fail("Move " + i + " in list failed because the piece was invalid.");
 			}
@@ -110,29 +105,29 @@ public class BoardTests {
 	@Test
 	public void testCheckRook() {
 		b = new Board(false);
-		b.addPiece(new Rook(1, 1, 0));
-		Piece king = new King(6, 1, 1);
+		b.addPiece(PieceFactory.makeRook(1, 1, 0));
+		IPiece king = PieceFactory.makeKing(6, 1, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Rook(1, 1, 0));
-		king = new King(1, 6, 1);
+		b.addPiece(PieceFactory.makeRook(1, 1, 0));
+		king = PieceFactory.makeKing(1, 6, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Rook(1, 6, 0));
-		king = new King(1, 1, 1);
+		b.addPiece(PieceFactory.makeRook(1, 6, 0));
+		king = PieceFactory.makeKing(1, 1, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Rook(6, 1, 0));
-		king = new King(1, 1, 1);
+		b.addPiece(PieceFactory.makeRook(6, 1, 0));
+		king = PieceFactory.makeKing(1, 1, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
@@ -141,29 +136,29 @@ public class BoardTests {
 	@Test
 	public void testCheckBishop() {
 		b = new Board(false);
-		b.addPiece(new Bishop(1, 1, 0));
-		Piece king = new King(6, 6, 1);
+		b.addPiece(PieceFactory.makeBishop(1, 1, 0));
+		IPiece king = PieceFactory.makeKing(6, 6, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Bishop(5, 5, 0));
-		king = new King(1, 1, 1);
+		b.addPiece(PieceFactory.makeBishop(5, 5, 0));
+		king = PieceFactory.makeKing(1, 1, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Bishop(6, 1, 0));
-		king = new King(1, 6, 1);
+		b.addPiece(PieceFactory.makeBishop(6, 1, 0));
+		king = PieceFactory.makeKing(1, 6, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Bishop(1, 6, 0));
-		king = new King(6, 1, 1);
+		b.addPiece(PieceFactory.makeBishop(1, 6, 0));
+		king = PieceFactory.makeKing(6, 1, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
@@ -172,64 +167,64 @@ public class BoardTests {
 	@Test
 	public void testCheckKnight() {
 		b = new Board(false);
-		b.addPiece(new Knight(6, 1, 0));
-		Piece king = new King(4, 2, 1);
+		b.addPiece(PieceFactory.makeKnight(6, 1, 0));
+		IPiece king = PieceFactory.makeKing(4, 2, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Knight(2, 1, 0));
-		king = new King(4, 2, 1);
+		b.addPiece(PieceFactory.makeKnight(2, 1, 0));
+		king = PieceFactory.makeKing(4, 2, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Knight(2, 3, 0));
-		king = new King(4, 2, 1);
+		b.addPiece(PieceFactory.makeKnight(2, 3, 0));
+		king = PieceFactory.makeKing(4, 2, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Knight(2, 1, 0));
-		king = new King(4, 2, 1);
+		b.addPiece(PieceFactory.makeKnight(2, 1, 0));
+		king = PieceFactory.makeKing(4, 2, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Knight(3, 2, 0));
-		king = new King(4, 4, 1);
+		b.addPiece(PieceFactory.makeKnight(3, 2, 0));
+		king = PieceFactory.makeKing(4, 4, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Knight(3, 6, 0));
-		king = new King(4, 4, 1);
+		b.addPiece(PieceFactory.makeKnight(3, 6, 0));
+		king = PieceFactory.makeKing(4, 4, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Knight(5, 6, 0));
-		king = new King(4, 4, 1);
+		b.addPiece(PieceFactory.makeKnight(5, 6, 0));
+		king = PieceFactory.makeKing(4, 4, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Knight(3, 2, 0));
-		king = new King(4, 4, 1);
+		b.addPiece(PieceFactory.makeKnight(3, 2, 0));
+		king = PieceFactory.makeKing(4, 4, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
 
 		b = new Board(false);
-		b.addPiece(new Knight(5, 2, 0));
-		king = new King(4, 4, 1);
+		b.addPiece(PieceFactory.makeKnight(5, 2, 0));
+		king = PieceFactory.makeKing(4, 4, 1);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 1));
 		assertTrue(b.isInCheck(1));
@@ -238,15 +233,15 @@ public class BoardTests {
 	@Test
 	public void testOtherKing() {
 		b = new Board(false);
-		b.addPiece(new Knight(5, 2, 1));
-		Piece king = new King(4, 4, 0);
+		b.addPiece(PieceFactory.makeKnight(5, 2, 1));
+		IPiece king = PieceFactory.makeKing(4, 4, 0);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 0));
 		assertTrue(b.isInCheck(0));
 
 		b = new Board(false);
-		b.addPiece(new Knight(5, 2, 1));
-		king = new King(4, 4, 0);
+		b.addPiece(PieceFactory.makeKnight(5, 2, 1));
+		king = PieceFactory.makeKing(4, 4, 0);
 		b.addPiece(king);
 		assertTrue(b.isThreatenedSquare(king.getX(), king.getY(), 0));
 		assertTrue(b.isInCheck(0));
@@ -255,7 +250,7 @@ public class BoardTests {
 	@Test
 	public void testBasicMove() {
 		b = new Board(false);
-		Piece pawn = new Pawn(6, 5, 0);
+		IPiece pawn = PieceFactory.makePawn(6, 5, 0);
 		b.addPiece(pawn);
 		b.move(6, 5, 4, 5);
 		assertEquals(b.getPiece(4, 5), pawn);
@@ -264,7 +259,7 @@ public class BoardTests {
 	@Test
 	public void testPawnMovement() {
 		b = new Board(false);
-		Piece pawn = new Pawn(6, 5, 0);
+		IPiece pawn = PieceFactory.makePawn(6, 5, 0);
 		b.addPiece(pawn);
 		assertTrue(pawn.validMove(4, 5, SquareStatus.EMPTY));
 		assertTrue(pawn.validMove(5, 5, SquareStatus.EMPTY));
@@ -274,7 +269,7 @@ public class BoardTests {
 		assertTrue(pawn.validMove(5, 4, SquareStatus.ENEMY));
 		assertTrue(pawn.validMove(5, 6, SquareStatus.ENEMY));
 		b.addPiece(pawn);
-		b.addPiece(new Pawn(5, 4, 1));
+		b.addPiece(PieceFactory.makePawn(5, 4, 1));
 		b.move(6, 5, 5, 4);
 		assertEquals(b.getPiece(5, 4), pawn);
 	}

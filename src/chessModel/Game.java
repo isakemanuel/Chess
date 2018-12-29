@@ -8,8 +8,9 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 // TO HERE -----------------------------------------------------
 
-import chessModel.piece.Piece;
+import chessModel.piece.IPiece;
 import chessViewController.HumanPlayer;
+
 
 public class Game {
 	private int currentSide;
@@ -111,7 +112,7 @@ public class Game {
 				int newX = move[2];
 				int newY = move[3];
 
-				Piece piece = board.getPiece(move[0], move[1]);
+				IPiece piece = board.getPiece(move[0], move[1]);
 
 				boolean validPiece = true;
 				if (piece == null) {
@@ -165,7 +166,7 @@ public class Game {
 	}
 
 	public boolean move(int oldX, int oldY, int x, int y) {
-		Piece tmp = board.getPiece(oldX, oldY);
+		IPiece tmp = board.getPiece(oldX, oldY);
 		if (tmp == null) {
 			return false;
 		}
@@ -208,18 +209,14 @@ public class Game {
 		return board.getBlackScore();
 	}
 
-	/**
-	 * @param side
-	 *            The side that is being checked for checkmate
-	 * @return
-	 */
+
 	public boolean isCheckMate() {
 		if (!board.isInCheck(currentSide)) { // Can't be in checkmate if not in
 												// check
 			return false;
 		}
 		for (Integer[] move : board.getAllMoves(0)) {
-			Piece p = board.getPiece(move[0], move[1]);
+			IPiece p = board.getPiece(move[0], move[1]);
 			if (board.resolvesCheck(p, move[2], move[3])) {
 				return false; // If there is a move that resolves check, it is
 								// not checkmate
@@ -228,11 +225,7 @@ public class Game {
 		return true;
 	}
 
-	/**
-	 * @param side
-	 *            The side that is being checked for a draw
-	 * @return
-	 */
+
 	public boolean isDraw() {
 		return (board.getAllMoves(currentSide).size() == 0);
 	}
