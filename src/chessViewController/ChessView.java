@@ -11,7 +11,7 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 
 import chessModel.Board;
-import chessModel.piece.Piece;
+import chessModel.piece.IPiece;
 import util.ChessUtil;
 
 @SuppressWarnings("serial")
@@ -20,7 +20,7 @@ public class ChessView extends JPanel {
 	private Board b;
 	HashMap<String, Character> charMap;
 	private final Color brown = new Color(130,70,30);
-	private Piece selected;
+	private IPiece selected;
 
 	public ChessView(Board b) {
 		setLayout(new FlowLayout());
@@ -60,11 +60,11 @@ public class ChessView extends JPanel {
 		});
 	}
 	
-	public void setSelected(Piece p){
+	public void setSelected(IPiece p){
 		selected = p;
 	}
 	
-	public Piece getSelected(){
+	public IPiece getSelected(){
 		return selected;
 	}
 
@@ -79,7 +79,7 @@ public class ChessView extends JPanel {
 		
 		for (int y = 0; y < b.boardHeight; y++) {
 			for (int x = 0; x < b.boardWidth; x++) {
-				Piece p = b.getPiece(y, x);
+				IPiece p = b.getPiece(y, x);
 				g.setColor(Color.lightGray);
 				if (parity) {
 					g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);

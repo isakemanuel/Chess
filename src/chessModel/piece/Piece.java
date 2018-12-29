@@ -2,11 +2,12 @@ package chessModel.piece;
 
 import chessModel.SquareStatus;
 
-public abstract class Piece
+abstract class Piece implements IPiece
 {
-    protected int x;    
+    protected int x;
     protected int y;
     protected int side;
+    private boolean hasMoved;
         
     public int getX(){
     	return x;
@@ -21,9 +22,13 @@ public abstract class Piece
     	if(validMove(x, y, status)){
     		this.x = x;
     		this.y = y;
+    		hasMoved = true;
     		return true;
     	}
     	return false;
+    }
+    public boolean hasMoved(){
+        return hasMoved;
     }
     public void forceMove(int x, int y){
     	this.x = x;

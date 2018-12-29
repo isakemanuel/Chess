@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import chessModel.piece.IPiece;
 import chessModel.piece.Pawn;
-import chessModel.piece.Piece;
 import util.ChessUtil;
 
-public class Log {
+public class 	Log {
 
 	private int fullMoveClock, halfMoveClock;
 
@@ -41,7 +41,7 @@ public class Log {
 		return rawlog;
 	}
 
-	public void addToLog(int oldX, int oldY, int x, int y, Board board, Piece piece, Piece capture) {
+	public void addToLog(int oldX, int oldY, int x, int y, Board board, IPiece piece, IPiece capture) {
 		int side = rawlog.size() % 2;
 
 		// update rawlog

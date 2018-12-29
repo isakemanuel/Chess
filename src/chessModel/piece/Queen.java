@@ -2,7 +2,7 @@ package chessModel.piece;
 
 import chessModel.SquareStatus;
 
-public class Queen extends Piece
+class Queen extends Piece
 {
     public Queen(int x, int y, int side)
     {
